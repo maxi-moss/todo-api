@@ -1,6 +1,5 @@
 from functools import lru_cache
 from datetime import datetime
-import asyncio
 import logging
 
 from supabase import create_client
@@ -64,7 +63,7 @@ class DatabaseService():
         )
         return response
     
-    async def update(self, id: int, type: str, field: str, value: str, edit_time: str):
+    async def update(self, id: int, type: str, field: str, value: str):
         """
         Update a field for a given database row.
         
@@ -76,7 +75,7 @@ class DatabaseService():
         """
         response = (
             self.client.table(type)
-            .update({field: value, "edited_at": edit_time})
+            .update({field: value, "edited_at": str(datetime.now())})
             .eq("id", id)
             .execute()
         )
@@ -104,8 +103,8 @@ def get_db_service():
     return DatabaseService()
 
 
-Database = DatabaseService()
-current_time = str(datetime.now())
+# Database = DatabaseService()
+# current_time = str(datetime.now())
 
 # --- Insert test ---
 # data = {"title": "test the app", "content": "This is a test", "created_at": current_time, "edited_at": current_time, "status": "in_progress"}
@@ -118,7 +117,7 @@ current_time = str(datetime.now())
 # response = asyncio.run(Database.delete(id=1, type="todo"))
 
 # --- Select test ---
-#response = asyncio.run(Database.select(id=3, fields="title, content", type="todo"))
+# response = asyncio.run(Database.select(id=3, fields="title, content", type="todo"))
 
 # --- Print test results ---
-#print(response)
+# print(response)
