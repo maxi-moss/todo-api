@@ -9,7 +9,7 @@ from todo.service import TodoService, get_todo_service
 router = APIRouter()
 
 
-@router.post("create")
+@router.post("/create")
 async def create_todo(
     request: TodoCreateRequest,
     service: TodoService = Depends(get_todo_service)
@@ -22,7 +22,7 @@ async def create_todo(
     return {"message": f"Successfully created todo: {results}"}
 
 
-@router.get("get")
+@router.get("/get")
 async def get_todo(
     id: int,
     fields: str,
@@ -42,7 +42,7 @@ async def get_todo(
     return {"message": f"Successfully fetched data from todo {id}: {fetched_data}"}
 
 
-@router.post("update")
+@router.post("/update")
 async def update_todo(
     request: TodoUpdateRequest,
     service: TodoService = Depends(get_todo_service)
@@ -63,7 +63,7 @@ async def update_todo(
     return {"message": f"Successfully updated data of todo {request.id}: {updated_data}"}
 
 
-@router.post("delete")
+@router.post("/delete")
 async def delete_todo(
     request: TodoDeleteRequest,
     service: TodoService = Depends(get_todo_service)
