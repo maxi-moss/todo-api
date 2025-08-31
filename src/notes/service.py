@@ -55,5 +55,5 @@ class NoteService():
     
     
 @lru_cache
-def get_service():
+def get_note_service():
     return NoteService()
