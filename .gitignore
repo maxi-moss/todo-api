@@ -12,11 +12,6 @@ wheels/
 # Environment variables
 .env
 
-# Claude Code
-.claude/**
-claude.md
-claude.local.md
-
 # VS Code and library caches
 .dist
 .flake8
