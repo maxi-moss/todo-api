@@ -10,11 +10,11 @@ router = APIRouter()
 
 
 @router.post("/create")
-async def create_todo(
+async def create(
     request: TodoCreateRequest,
     service: TodoService = Depends(get_todo_service)
 ):
-    results = await service.create_todo(
+    results = await service.create(
         request.title,
         request.content,
         request.status
@@ -23,7 +23,7 @@ async def create_todo(
 
 
 @router.get("/get")
-async def get_todo(
+async def get(
     id: int,
     fields: str,
     service: TodoService = Depends(get_todo_service),
@@ -35,7 +35,7 @@ async def get_todo(
         id (int): Entry id.
         fields (str): Fields to select (Example: "title, content").
     """
-    fetched_data = await service.get_todo(
+    fetched_data = await service.get(
         id,
         fields
     )
@@ -43,7 +43,7 @@ async def get_todo(
 
 
 @router.post("/update")
-async def update_todo(
+async def update(
     request: TodoUpdateRequest,
     service: TodoService = Depends(get_todo_service)
 ):
@@ -55,7 +55,7 @@ async def update_todo(
         field (str): Field to update.
         new_value (str): Updated field value.
     """
-    updated_data = await service.update_todo(
+    updated_data = await service.update(
         request.id,
         request.field,
         request.new_value
@@ -64,11 +64,11 @@ async def update_todo(
 
 
 @router.post("/delete")
-async def delete_todo(
+async def delete(
     request: TodoDeleteRequest,
     service: TodoService = Depends(get_todo_service)
 ):
-    deleted_data = await service.delete_todo(
+    deleted_data = await service.delete(
         request.id
     )
     return {"message": f"Successfully deleted todo {request.id}: {deleted_data}"}

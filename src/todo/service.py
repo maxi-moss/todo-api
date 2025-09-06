@@ -4,17 +4,18 @@ from typing import Optional
 from functools import lru_cache
 import logging
 
+from common.crud_interface import CRUD
 from database.service import get_db_service
 from todo.utils import build_data_model
 
 logger = logging.getLogger(__name__)
 
 
-class TodoService():
+class TodoService(CRUD):
     def __init__(self):
         self.db_client = get_db_service()
         
-    async def create_todo(self, title: str, content: Optional[str] = "No description...", status: Optional[str] = "To do"):
+    async def create(self, title: str, content: Optional[str] = "No description...", status: Optional[str] = "To do"):
         """
         Create a todo and add it to the database.
         
@@ -24,14 +25,14 @@ class TodoService():
             status (str): Status (defaults to "To do").
         """
         try:
-            data = build_data_model(title, content, status)
+            data = await build_data_model(title, content, status)
             inserted_data = await self.db_client.insert(type="todo", data=data)
-            logger.info("Successfully inserted data:", inserted_data)
+            logger.info(f"Successfully inserted data: {inserted_data}")
         except Exception as e:
-            logger.error(f"Error when creating todo: {e}")
+            logger.error(f"Error when creating todo: {str(e)}")
         return inserted_data
         
-    async def get_todo(self, id: int, fields: Optional[str] = "*"):
+    async def get(self, id: int, fields: Optional[str] = "*"):
         """
         Get todo contents from the database.
         
@@ -41,12 +42,12 @@ class TodoService():
         """
         try:
             todo_content = await self.db_client.select(id=id, type="todo", fields=fields)
-            logger.info("Successfully read data: ", todo_content)
+            logger.info(f"Successfully read data: {todo_content}")
         except Exception as e:
             logger.error(f"Error when reading todo {e}")
         return todo_content
           
-    async def update_todo(
+    async def update(
         self, 
         id: int, 
         field: str,
@@ -67,7 +68,7 @@ class TodoService():
             logger.error(f"Error when reading todo {e}")
         return updated_data
     
-    async def delete_todo(self, id):
+    async def delete(self, id):
         """
         Delete a todo from the database.
         
