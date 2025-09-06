@@ -6,6 +6,7 @@ from fastapi.staticfiles import StaticFiles
 
 from config import settings
 from logger import log_requests
+from note.router import router as note_router
 from todo.router import router as todo_router
 
 
@@ -26,6 +27,7 @@ app.middleware("http")(log_requests)
 
 
 # Include route modules
+app.include_router(note_router, prefix="/api/note", tags=["note"])
 app.include_router(todo_router, prefix="/api/todo", tags=["todo"])
 
 
